@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DreamSense - Interpretazione avanzata dei sogni con approcci psicodinamici, archetipici e transpersonali">
+    <title>DreamSense - Interpretazione Profonda dei Sogni</title>
+    <style>
+        :root {
+            --primary: #5e35b1;
+            --secondary: #7c4dff;
+            --accent: #b388ff;
+            --light: #f5f5f5;
+            --dark: #263238;
+            --text: #424242;
+            --card: #ffffff;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background-color: var(--light);
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        header {
+            text-align: center;
+            margin: 2rem 0 3rem;
+            padding: 1rem;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .tagline {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .dream-form {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .dream-form:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .method-selector {
+            margin: 1.5rem 0;
+        }
+        
+        .method-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .method-option input {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .method-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0.5rem;
+            background: rgba(123, 77, 255, 0.08);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            min-height: 80px;
+        }
+        
+        .method-option label::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .method-option input:checked + label {
+            background: rgba(123, 77, 255, 0.15);
+            box-shadow: 0 0 0 2px var(--secondary);
+        }
+        
+        .method-option input:checked + label::before {
+            background: var(--secondary);
+            box-shadow: inset 0 0 0 4px white;
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(94, 53, 177, 0.4);
+        }
+        
+        button:disabled {
+            background: #bdbdbd;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        
+        #interpretation-result {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-top: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        
+        #interpretation-result.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .interpretation-header {
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .interpretation-header h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .interpretation-meta {
+            display: flex;
+            gap: 1rem;
+            color: #757575;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        .insight-section {
+            margin: 2rem 0;
+        }
+        
+        .insight-card {
+            background: rgba(123, 77, 255, 0.05);
+            border-left: 4px solid var(--secondary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .insight-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .symbol-card {
+            background: var(--card);
+            padding: 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .symbol-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .symbol-card strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(123, 77, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--secondary);
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .loading-subtext {
+            color: #757575;
+        }
+        
+        .error-message {
+            color: #d32f2f;
+            text-align: center;
+            padding: 2rem;
+            background: #ffebee;
+            border-radius: 8px;
+            border-left: 4px solid #d32f2f;
+            margin: 1rem 0;
+        }
+        
+        .error-message svg {
+            margin-bottom: 1rem;
+        }
+        
+        .error-message h3 {
+            margin-bottom: 0.5rem;
+            color: #d32f2f;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem 0;
+            color: #757575;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .dream-form {
+                padding: 1.5rem;
+            }
+            
+            .method-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .interpretation-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>DreamSense</h1>
+        <p class="tagline">Svela il significato nascosto dei tuoi sogni con la nostra analisi avanzata</p>
+    </header>
+    
+    <main class="container">
+        <form class="dream-form" id="dreamForm">
+            <div class="form-group">
+                <label for="dreamText">Racconta il tuo sogno nel dettaglio</label>
+                <textarea id="dreamText" placeholder="Descrivi tutto ciò che ricordi: luoghi, persone, azioni, emozioni..." required></textarea>
+            </div>
+            
+            <div class="method-selector">
+                <label>Scegli il metodo di interpretazione:</label>
+                <div class="method-options">
+                    <div class="method-option">
+                        <input type="radio" id="dynamic" name="interpretationMethod" value="dynamic" checked>
+                        <label for="dynamic">
+                            <span>Psicodinamico</span>
+                            <small>Conflitti inconsci</small>
+                        </label>
+                    </div>
+                    <div class="method-option">
+                        <input type="radio" id="archetypal" name="interpretationMethod" value="archetypal">
+                        <label for="archetypal">
+                            <span>Archetipico</span>
+                            <small>Simboli universali</small>
+                        </label>
+                    </div>
+                    <div class="method-option">
+                        <input type="radio" id="cognitive" name="interpretationMethod" value="cognitive">
+                        <label for="cognitive">
+                            <span>Cognitivo</span>
+                            <small>Elaborazione mentale</small>
+                        </label>
+                    </div>
+                    <div class="method-option">
+                        <input type="radio" id="transpersonal" name="interpretationMethod" value="transpersonal">
+                        <label for="transpersonal">
+                            <span>Transpersonale</span>
+                            <small>Significato spirituale</small>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" id="interpretBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                Interpreta il sogno
+            </button>
+        </form>
+        
+        <div id="interpretation-result"></div>
+    </main>
+
+    <footer>
+        <p>DreamSense &copy; <span id="current-year">2023</span> - Uno strumento per l'esplorazione onirica</p>
+        <p><small>Le interpretazioni sono generiche e non sostituiscono una consulenza professionale.</small></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Imposta l'anno corrente nel footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            const dreamForm = document.getElementById('dreamForm');
+            const dreamText = document.getElementById('dreamText');
+            const interpretBtn = document.getElementById('interpretBtn');
+            const resultDiv = document.getElementById('interpretation-result');
+            
+            // Database avanzato dei sogni
+            const DREAM_DATABASE = {
+                dynamic: {
+                    title: "Analisi Psicodinamica",
+                    description: "Approccio che esplora i conflitti inconsci e le dinamiche emotive nascoste",
+                    approach: (text) => `Il tuo sogno "${shortenText(text)}" rivela:`,
+                    layers: [
+                        "Desideri e paure represse che cercano espressione",
+                        "Conflitti interiori tra diverse parti di te",
+                        "Meccanismi di difesa psicologica in azione",
+                        "Connessioni tra presente e esperienze passate"
+                    ],
+                    symbols: {
+                        acqua: "Emozioni profonde, inconscio o nascita/nuovi inizi",
+                        fuoco: "Passione, trasformazione o rabbia repressa",
+                        caduta: "Perdita di controllo, insicurezza o resa",
+                        volo: "Libertà, aspirazioni o fuga dalla realtà",
+                        denti: "Preoccupazioni sull'immagine di sé o autostima",
+                        morte: "Fine di un ciclo, trasformazione radicale",
+                        inseguimento: "Ansia, situazioni non risolte o paure",
+                        nudo: "Vulnerabilità, autenticità o paura dell'esposizione",
+                        scuola: "Apprendimento, prove o valutazione di sé",
+                        gravidanza: "Creatività, nuovi progetti o potenziale inespresso"
+                    },
+                    exercise: {
+                        title: "Esercizio di Autoanalisi",
+                        steps: [
+                            "Identifica l'elemento più vivido del sogno",
+                            "Associalo a una situazione attuale della tua vita",
+                            "Collegalo a un ricordo d'infanzia significativo",
+                            "Cosa ti rivelano queste connessioni?"
+                        ]
+                    }
+                },
+                archetypal: {
+                    title: "Mappa Archetipica",
+                    description: "Analisi basata sugli archetipi universali di Jung",
+                    approach: (text) => `"${shortenText(text)}" contiene:`,
+                    layers: [
+                        "Figure archetipiche che rappresentano parti di te",
+                        "Il processo di individuazione e crescita personale",
+                        "Dialogo tra conscio e inconscio collettivo",
+                        "Pattern mitici ricorrenti nella psiche"
+                    ],
+                    symbols: {
+                        vecchio: "Il Saggio (conoscenza interiore, guida spirituale)",
+                        bambino: "Il Puer (potenziale, innocenza, nuovi inizi)",
+                        ombra: "Aspetti rifiutati del Sé che chiedono integrazione",
+                        eroe: "La parte di te che affronta le sfide della vita",
+                        trickster: "Caos creativo, cambiamento, lezioni nascoste",
+                        grande_madre: "Nutrimento, creatività, accoglienza",
+                        anima: "Femminile interiore (per gli uomini), animus per le donne",
+                        viaggio: "Percorso di trasformazione interiore"
+                    },
+                    exercise: {
+                        title: "Dialogo con l'Archetipo",
+                        steps: [
+                            "Scegli un personaggio/oggetto archetipico dal sogno",
+                            "Immagina di dialogare con questa figura",
+                            "Chiedi: 'Cosa rappresenti nella mia vita?'",
+                            "Ascolta la risposta che emerge spontaneamente"
+                        ]
+                    }
+                },
+                cognitive: {
+                    title: "Elaborazione Cognitiva",
+                    description: "Interpretazione neuroscientifica dei processi mentali",
+                    approach: (text) => `La tua mente elabora "${shortenText(text)}" attraverso:`,
+                    layers: [
+                        "Consolidamento di memorie ed esperienze",
+                        "Simulazione di scenari e possibilità future",
+                        "Regolazione degli stati emotivi",
+                        "Problem-solving creativo"
+                    ],
+                    symbols: {
+                        casa: "Struttura del sé, organizzazione mentale",
+                        labirinto: "Processo decisionale, ricerca di soluzioni",
+                        esame: "Prove da superare, autovalutazione",
+                        strumenti: "Risorse disponibili o abilità da sviluppare",
+                        veicolo: "Direzione di vita, mezzi per progredire",
+                        telefono: "Comunicazione con aspetti di sé o altri",
+                        specchio: "Autoconsapevolezza, riflessione su sé stessi",
+                        denaro: "Valore personale, scambio emotivo"
+                    },
+                    exercise: {
+                        title: "Collegamento con la Realtà",
+                        steps: [
+                            "Seleziona 3 elementi salienti del sogno",
+                            "Per ciascuno, trova un parallelo nella vita quotidiana",
+                            "Quale aspetto ti sta aiutando a elaborare?",
+                            "Cosa puoi apprendere da queste connessioni?"
+                        ]
+                    }
+                },
+                transpersonal: {
+                    title: "Dimensione Transpersonale",
+                    description: "Lettura spirituale e trascendente del sogno",
+                    approach: (text) => `"${shortenText(text)}" suggerisce:`,
+                    layers: [
+                        "Messaggi dall'inconscio collettivo",
+                        "Prove evolutive per l'anima",
+                        "Sincronicità e connessioni significative",
+                        "Pattern karmici o lezioni esistenziali"
+                    ],
+                    symbols: {
+                        luce: "Illuminazione, intuizione, verità interiore",
+                        tempio: "Spazio sacro interiore, connessione col divino",
+                        albero: "Crescita spirituale, radici e ramificazioni",
+                        animali: "Guide spirituali, istinti, alleati simbolici",
+                        numeri: "Simboli universali con significati precisi",
+                        ponte: "Transizione tra stati di coscienza",
+                        cristalli: "Energie sottili, potenziale di guarigione",
+                        ali: "Elevazione spirituale, libertà interiore"
+                    },
+                    exercise: {
+                        title: "Meditazione Guidata",
+                        steps: [
+                            "Scegli l'immagine più potente del sogno",
+                            "Visualizzala con gli occhi chiusi",
+                            "Osserva le sensazioni fisiche ed emotive",
+                            "Quale messaggio o intuizione ricevi?"
+                        ]
+                    }
+                }
+            };
+
+            // Funzioni di supporto
+            function shortenText(text, maxLength = 30) {
+                if (!text) return '';
+                const trimmed = text.trim();
+                return trimmed.length > maxLength ? 
+                    trimmed.substring(0, maxLength).trim() + "..." : 
+                    trimmed;
+            }
+
+            function detectSymbols(text, method) {
+                if (!text || !DREAM_DATABASE[method]) return [];
+                const symbols = DREAM_DATABASE[method].symbols;
+                const lowerText = text.toLowerCase();
+                
+                return Object.keys(symbols)
+                    .filter(symbol => lowerText.includes(symbol))
+                    .sort(() => Math.random() - 0.5) // Mescola i risultati
+                    .slice(0, 4); // Limita a 4 simboli
+            }
+
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+
+            function showLoading() {
+                resultDiv.innerHTML = `
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Analisi del sogno in corso</div>
+                        <div class="loading-subtext">Stiamo esaminando simboli e pattern...</div>
+                    </div>
+                `;
+                resultDiv.classList.remove('show');
+                setTimeout(() => resultDiv.classList.add('show'), 10);
+            }
+
+            function showError(message) {
+                resultDiv.innerHTML = `
+                    <div class="error-message">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <h3>Si è verificato un problema</h3>
+                        <p>${message}</p>
+                    </div>
+                `;
+                resultDiv.classList.add('show');
+            }
+
+            function showInterpretation(content) {
+                resultDiv.innerHTML = content;
+                resultDiv.classList.add('show');
+                
+                // Animazione di comparsa
+                setTimeout(() => {
+                    resultDiv.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+
+            // Gestione del form
+            dreamForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const text = dreamText.value.trim();
+                if (!text) {
+                    showError('Per favore descrivi il tuo sogno');
+                    return;
+                }
+                
+                const method = document.querySelector('input[name="interpretationMethod"]:checked')?.value || 'dynamic';
+                
+                interpretBtn.disabled = true;
+                dreamText.readOnly = true;
+                showLoading();
+                
+                try {
+                    // Aggiungi un timeout per gestire eventuali blocchi
+                    const interpretation = await Promise.race([
+                        interpretDream(text, method),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+                    ]);
+                    
+                    showInterpretation(interpretation);
+                } catch (error) {
+                    console.error('Interpretation error:', error);
+                    showError(error.message === 'Timeout' ? 
+                        'Il server sta impiegando troppo tempo a rispondere. Riprova più tardi.' : 
+                        'Si è verificato un errore durante l\'interpretazione. Per favore riprova.');
+                } finally {
+                    interpretBtn.disabled = false;
+                    dreamText.readOnly = false;
+                }
+            });
+
+            // Funzione principale di interpretazione
+            async function interpretDream(dreamText, method) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        const engine = DREAM_DATABASE[method] || DREAM_DATABASE.dynamic;
+                        const detectedSymbols = detectSymbols(dreamText, method);
+                        
+                        const interpretation = `
+                            <div class="interpretation-header">
+                                <h2>${engine.title}</h2>
+                                <div class="interpretation-meta">
+                                    <span>${new Date().toLocaleDateString('it-IT')}</span>
+                                    <span>•</span>
+                                    <span>${engine.description}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="insight-section">
+                                <p><strong>${engine.approach(dreamText)}</strong></p>
+                                
+                                <div class="insight-card">
+                                    <h3>Livelli di Significato</h3>
+                                    <ul style="list-style-type: none; padding-left: 0;">
+                                        ${engine.layers.map(layer => `
+                                            <li style="margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${getComputedStyle(document.documentElement).getPropertyValue('--secondary')}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 0; top: 0.2rem;">
+                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                </svg>
+                                                ${layer}
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                                
+                                ${generateSymbolsAnalysis(detectedSymbols, engine.symbols)}
+                                
+                                <div class="insight-card">
+                                    <h3>${engine.exercise.title}</h3>
+                                    <ol style="padding-left: 1.5rem;">
+                                        ${engine.exercise.steps.map(step => `
+                                            <li style="margin-bottom: 0.8rem;">${step}</li>
+                                        `).join('')}
+                                    </ol>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1); color: #757575; font-size: 0.9rem;">
+                                <p>Questa interpretazione è generica e serve come punto di partenza per la tua riflessione personale.</p>
+                            </div>
+                        `;
+                        
+                        resolve(interpretation);
+                    }, 1500); // Simula il tempo di elaborazione
+                });
+            }
+
+            function generateSymbolsAnalysis(symbols, symbolDB) {
+                if(!symbols || symbols.length === 0) {
+                    return `
+                        <div class="insight-card">
+                            <h3>Elementi Simbolici</h3>
+                            <p>Non sono stati rilevati simboli specifici. Concentrati sulle emozioni provate durante il sogno per un'analisi più profonda.</p>
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="insight-card">
+                        <h3>Simboli Rilevati</h3>
+                        <p>Ecco i significati principali degli elementi presenti nel tuo sogno:</p>
+                        
+                        <div class="symbol-grid">
+                            ${symbols.map(symbol => `
+                                <div class="symbol-card">
+                                    <strong>${capitalizeFirstLetter(symbol.replace('_', ' '))}</strong>
+                                    <p>${symbolDB[symbol]}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Focus sul textarea al caricamento
+            dreamText.focus();
+        });
+    </script>
+</body>
+</html>
